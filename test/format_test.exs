@@ -11,7 +11,7 @@ defmodule Validatex.FormatTest do
 
   test :nil do
     assert V.valid?(F.new, nil) == :nil_not_allowed
-    assert V.valid?(F.new(nil_undefined: false), nil) == :nil_not_allowed
+    assert V.valid?(F.new(allow_nil: false), nil) == :nil_not_allowed
     assert V.valid?(F.new(allow_nil: true, allow_empty: true), nil) == true
   end
 
