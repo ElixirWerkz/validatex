@@ -11,7 +11,7 @@ def validate(plan) do
     Enum.filter results, only_errors
 end
 
-defrecord Numericality, 
+defrecord Numericality,
           allow_undefined: false,
           allow_nil: false,
           allow_list: false,
@@ -42,12 +42,12 @@ defrecord Type,
           allow_nil: false,
           allow_undefined: false
 
-defrecord Union, 
+defrecord Union,
           options: []
-defrecord All, 
-          options: []          
-defrecord Neg, 
-          validation: nil, 
+defrecord All,
+          options: []
+defrecord Neg,
+          validation: nil,
           message: false
 
 defprotocol Validate do
@@ -67,7 +67,7 @@ defimpl Validate, for: Numericality do
   def valid?(N[ allow_list: true] = v, l) when is_list(l), do: valid?(v, iolist_to_binary(l))
 
   def valid?(N[ allow_string: true, allow_empty: false], ""), do: :empty_not_allowed
-  def valid?(N[ allow_string: true, allow_empty: true, default: default] = v,  ""), do: valid?(v, default)     
+  def valid?(N[ allow_string: true, allow_empty: true, default: default] = v,  ""), do: valid?(v, default)
   def valid?(N[ allow_string: false ], s) when is_binary(s), do: :string_not_allowed
   def valid?(N[ allow_string: true, allow_rest: rest ] = v, s) when is_binary(s) do
       str = String.to_char_list!(s)
@@ -85,9 +85,8 @@ defimpl Validate, for: Numericality do
               {value_f, _} ->
                 if rest, do: valid?(v, value_f), else: :rest_not_allowed
             end
-     end          
+     end
   end
-  
   def valid?(N[ allow_float: false ], f) when is_float(f), do: :float_not_allowed
   def valid?(N[], v) when is_number(v), do: true
   def valid?(N[], _), do: :number_expected
@@ -121,7 +120,7 @@ defimpl Validate, for: Format do
   def valid?(F[allow_list: true] = v, l) when is_list(l), do: valid?(v, iolist_to_binary(l))
 
   def valid?(F[allow_empty: false], ""), do: :empty_not_allowed
-  
+
   def valid?(F[re: {Regex, _, _, _, _} = re], s) when is_binary(s) do
       if Regex.match?(re, s), do: true, else: :no_match
   end
@@ -176,7 +175,7 @@ end
 defimpl Validate, for: Union do
   def valid?(Union[options: options], value) do
     results =
-    Enum.reduce options, [], 
+    Enum.reduce options, [],
                 fn(v, acc) ->
                   unless (res = Validate.valid?(v, value)) == true do
                     [{v, res}|acc]
@@ -184,7 +183,7 @@ defimpl Validate, for: Union do
                     acc
                   end
                 end
-    noptions = length(options)              
+    noptions = length(options)
     case length(results) do
       ^noptions -> results
       _ -> true
@@ -195,7 +194,7 @@ end
 defimpl Validate, for: All do
   def valid?(All[options: options], value) do
     results =
-    Enum.reduce options, [], 
+    Enum.reduce options, [],
                 fn(v, acc) ->
                   unless (res = Validate.valid?(v, value)) == true do
                     [{v, res}|acc]
