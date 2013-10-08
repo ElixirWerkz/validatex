@@ -26,6 +26,9 @@ defrecord Range,
           to: nil,
           exclusive: false
 
+defrecord Element,
+          list: nil
+
 defrecord Format,
           allow_undefined: false,
           allow_nil: false,
@@ -106,6 +109,15 @@ defimpl Validate, for: Range do
   def valid?(R[to: to, exclusive: false], v) when to !== nil and v > to, do: :greater
   def valid?(R[to: to, exclusive: true], v) when to !== nil and v >= to, do: :greater
   def valid?(R[], _), do: true
+
+end
+
+defimpl Validate, for: Element do
+  alias Element, as: E
+  def valid?(E[list: nil], _), do: false
+  def valid?(E[list: list], element) when is_list(list) do
+    element in list
+  end
 
 end
 
