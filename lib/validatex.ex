@@ -83,7 +83,7 @@ defmodule Validatex do
             message: false
 
   defprotocol Validate do
-    @only [Record, Any]
+    @fallback_to_any true
     def valid?(validator, data)
   end
 
