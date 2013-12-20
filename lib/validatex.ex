@@ -184,9 +184,7 @@ defmodule Validatex do
         Validatex.Validate.valid?(validator, size(v))
     end
 
-    def valid?(L[is: validator], _) do
-        Validatex.Validate.valid?(validator)
-    end
+    def valid?(L[is: _validator], _data), do: :bad_argument
 
   end
 
