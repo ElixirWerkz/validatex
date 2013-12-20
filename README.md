@@ -1,6 +1,6 @@
 Validatex
 ==========
-[![Build Status](https://secure.travis-ci.org/ElixirWerkz/validatex.png)](http://travis-ci.org/yrashk/validatex)
+[![Build Status](https://secure.travis-ci.org/ElixirWerkz/validatex.png)](http://travis-ci.org/ElixirWerkz/validatex)
 
 
 Validatex is a simple Elixir library for validating (input) data
